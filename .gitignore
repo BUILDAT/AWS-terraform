@@ -1,4 +1,8 @@
 # Ignore the following files
 .DS_Store
+<<<<<<< HEAD
 .tfstate.backup
 .terraform
+=======
+.terraform/
+>>>>>>> drew-branch
