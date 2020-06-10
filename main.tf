@@ -27,37 +27,17 @@ resource "aws_s3_bucket" "buildat-state-storage" {
       enabled = true
     }
  
-    lifecycle_rule {
-      enabled = true
-    }
- 
     tags = {
       Name = "S3 Remote Terraform State Store"
     }      
 }
-
-resource "aws_s3_bucket_policy" "buildat-state-policy" {
-  bucket = "buildat-state-storage"
-
-  policy = <<POLICY
-{
-  "Id": "Policy1591731231798",
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "Stmt1591731226539",
-      "Action": [
-        "s3:ListBucket"
-      ],
-      "Effect": "Allow",
-      "Resource": "arn:aws:s3:::buildat-state-storage",
-      "Principal": {
-        "AWS": [
-          "arn:aws:iam::011408120377:user/*"
-        ]
-      }
-    }
-  ]
-}
-POLICY
+# Create a DynamoDB 
+resource "aws_dynamodb_table" "terraform_locks" {
+  name         = "buildat-terraform-locks"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "LockID"
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
 }
